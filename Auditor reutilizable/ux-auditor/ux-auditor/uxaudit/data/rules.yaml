@@ -1,0 +1,1071 @@
+# Catálogo de reglas del UX-Auditor (Índice IUX).
+#
+# Campos:
+#   id          identificador único (MAYÚSCULAS, guiones)
+#   dimension   D1..D7 (ver uxaudit/models.py)
+#   titulo      texto corto para el informe
+#   severidad   critica | alta | media | baja   (peso 4 | 3 | 2 | 1)
+#   tipo        auto     -> la evalúa un analizador automático
+#               metrica  -> valor continuo (Core Web Vitals, SUS...)
+#               manual   -> la responde un evaluador experto (uxaudit manual)
+#   viewports   todas | movil | escritorio   (dónde se comprueba)
+#   norma       referencia normativa o referente
+#   kb          nombre exacto del "Issue" en ux-guidelines.csv (UI UX Pro Max)
+#   hacer/evitar  corrección propuesta en español
+#   axe         (solo D1) reglas de axe-core que alimentan la regla
+#   pregunta    (solo manual) pregunta del cuestionario experto
+version: "2.1.0"
+
+reglas:
+
+# ───────────────────────── D1 · ACCESIBILIDAD ─────────────────────────
+- id: A11Y-CONTRASTE
+  dimension: D1
+  titulo: Contraste de color del texto
+  severidad: alta
+  tipo: auto
+  norma: WCAG 2.2 · 1.4.3 Contraste (mínimo)
+  kb: Color Contrast
+  axe: [color-contrast]
+  hacer: Asegura un contraste de al menos 4,5:1 en texto normal y 3:1 en texto grande (≥ 24 px o ≥ 18,66 px en negrita).
+  evitar: Texto gris claro sobre fondo blanco o texto sobre imágenes sin capa de contraste.
+
+- id: A11Y-ALT
+  dimension: D1
+  titulo: Texto alternativo en imágenes
+  severidad: alta
+  tipo: auto
+  norma: WCAG 2.2 · 1.1.1 Contenido no textual
+  kb: Alt Text
+  axe: [image-alt, input-image-alt, area-alt, svg-img-alt, role-img-alt, object-alt, image-redundant-alt]
+  hacer: Describe en el atributo alt la función o el contenido de cada imagen significativa; usa alt="" en las decorativas.
+  evitar: Omitir el atributo alt o rellenarlo con el nombre del fichero («IMG_2034.jpg»).
+
+- id: A11Y-NOMBRES
+  dimension: D1
+  titulo: Nombre accesible en botones, enlaces y controles
+  severidad: critica
+  tipo: auto
+  norma: WCAG 2.2 · 4.1.2 Nombre, función, valor
+  kb: ARIA Labels
+  axe: [button-name, link-name, select-name, input-button-name, frame-title, aria-command-name, aria-input-field-name, aria-toggle-field-name, aria-meter-name, aria-progressbar-name, aria-tooltip-name, aria-treeitem-name, summary-name]
+  hacer: Da a cada control un nombre que pueda leer un lector de pantalla (texto visible, aria-label o aria-labelledby).
+  evitar: Botones que solo contienen un icono sin aria-label.
+
+- id: A11Y-ETIQUETAS
+  dimension: D1
+  titulo: Campos de formulario etiquetados
+  severidad: alta
+  tipo: auto
+  norma: WCAG 2.2 · 1.3.1 / 3.3.2 Etiquetas o instrucciones
+  kb: Form Labels
+  axe: [label, label-title-only, form-field-multiple-labels, autocomplete-valid]
+  hacer: Asocia cada campo con un <label for="id"> o envuélvelo en un <label>.
+  evitar: Usar solo el placeholder o el atributo title como etiqueta.
+
+- id: A11Y-ARIA
+  dimension: D1
+  titulo: Uso correcto de ARIA
+  severidad: alta
+  tipo: auto
+  norma: WCAG 2.2 · 4.1.2 / WAI-ARIA 1.2
+  kb: Screen Reader
+  axe: [aria-allowed-attr, aria-required-attr, aria-valid-attr, aria-valid-attr-value, aria-roles, aria-hidden-focus, aria-required-children, aria-required-parent, aria-prohibited-attr, aria-hidden-body, aria-deprecated-role, aria-conditional-attr, aria-braille-equivalent, aria-allowed-role, presentation-role-conflict]
+  hacer: Usa HTML semántico primero y ARIA solo cuando haga falta, con roles y atributos válidos.
+  evitar: aria-hidden="true" sobre elementos que reciben el foco o roles inventados.
+
+- id: A11Y-IDIOMA
+  dimension: D1
+  titulo: Idioma de la página declarado
+  severidad: alta
+  tipo: auto
+  norma: WCAG 2.2 · 3.1.1 Idioma de la página
+  kb: Screen Reader
+  axe: [html-has-lang, html-lang-valid, valid-lang, html-xml-lang-mismatch]
+  hacer: Declara el idioma en <html lang="es">.
+  evitar: Omitir lang o usar un código inexistente.
+
+- id: A11Y-ESTRUCTURA
+  dimension: D1
+  titulo: Estructura semántica (listas, tablas, ids)
+  severidad: media
+  tipo: auto
+  norma: WCAG 2.2 · 1.3.1 Información y relaciones
+  kb: Screen Reader
+  axe: [list, listitem, definition-list, dlitem, duplicate-id-aria, td-headers-attr, th-has-data-cells, table-duplicate-name, scope-attr-valid, empty-table-header]
+  hacer: Usa las etiquetas HTML con su significado (ul/li, table/th) e ids únicos.
+  evitar: Maquetar con tablas o crear listas con <div>.
+
+- id: A11Y-ENCABEZADOS
+  dimension: D1
+  titulo: Jerarquía de encabezados
+  severidad: media
+  tipo: auto
+  norma: WCAG 2.2 · 1.3.1 / 2.4.6 Encabezados y etiquetas
+  kb: Heading Hierarchy
+  axe: [heading-order, empty-heading, page-has-heading-one, p-as-heading]
+  hacer: Un único h1 y niveles consecutivos (h1 → h2 → h3) que describan el contenido.
+  evitar: Saltar niveles o elegir el encabezado por su tamaño visual.
+
+- id: A11Y-ZOOM
+  dimension: D1
+  titulo: Zoom permitido
+  severidad: alta
+  tipo: auto
+  norma: WCAG 2.2 · 1.4.4 Cambio de tamaño del texto
+  kb: Viewport Meta
+  axe: [meta-viewport, meta-viewport-large]
+  hacer: Usa <meta name="viewport" content="width=device-width, initial-scale=1">.
+  evitar: user-scalable=no o maximum-scale=1.
+
+- id: A11Y-TECLADO
+  dimension: D1
+  titulo: Contenido operable con teclado (estructura)
+  severidad: alta
+  tipo: auto
+  norma: WCAG 2.2 · 2.1.1 Teclado
+  kb: Keyboard Navigation
+  axe: [scrollable-region-focusable, nested-interactive, tabindex, frame-focusable-content, accesskeys]
+  hacer: Que todo control interactivo sea alcanzable con Tab y que las zonas con scroll puedan recibir el foco.
+  evitar: Controles anidados (un botón dentro de un enlace) o tabindex positivos.
+
+- id: A11Y-TECLADO-ALCANCE
+  dimension: D1
+  titulo: Controles alcanzables pulsando Tab
+  severidad: critica
+  tipo: auto
+  viewports: escritorio
+  norma: WCAG 2.2 · 2.1.1 Teclado
+  kb: Keyboard Navigation
+  hacer: Usa <button> y <a href> nativos; si creas un control propio, añade tabindex="0" y manejadores de teclado.
+  evitar: Elementos clicables que no reciben el foco del teclado.
+
+- id: A11Y-TRAMPA-TECLADO
+  dimension: D1
+  titulo: Sin trampas de teclado
+  severidad: critica
+  tipo: auto
+  viewports: escritorio
+  norma: WCAG 2.2 · 2.1.2 Sin trampas para el foco del teclado
+  kb: Keyboard Navigation
+  hacer: El foco siempre debe poder salir de cualquier componente con Tab, Mayús+Tab o Esc.
+  evitar: Scripts que devuelven el foco a un elemento cuando el usuario intenta salir.
+
+- id: A11Y-FOCO-VISIBLE
+  dimension: D1
+  titulo: Foco visible al navegar con teclado
+  severidad: alta
+  tipo: auto
+  viewports: escritorio
+  norma: WCAG 2.2 · 2.4.7 Foco visible
+  kb: Focus States
+  hacer: Muestra un indicador claro (contorno de 2–4 px con contraste 3:1) con :focus-visible.
+  evitar: outline:none sin estilo de foco alternativo.
+
+- id: A11Y-FOCO-OCULTO
+  dimension: D1
+  titulo: El foco no queda tapado por elementos fijos
+  severidad: alta
+  tipo: auto
+  viewports: escritorio
+  norma: WCAG 2.2 · 2.4.11 Foco no oculto (mínimo)
+  kb: Focus Not Obscured (Minimum)
+  hacer: Reserva espacio (scroll-padding) para cabeceras, banners de cookies y barras fijas.
+  evitar: Cabeceras sticky o banners que cubren el control enfocado.
+
+- id: A11Y-REFLOW
+  dimension: D1
+  titulo: Reflujo a 320 px sin scroll horizontal
+  severidad: critica
+  tipo: auto
+  viewports: movil
+  norma: WCAG 2.2 · 1.4.10 Reflujo
+  kb: Text Reflow and Spacing
+  hacer: Diseño fluido (porcentajes, flex/grid, max-width:100%) que se adapte a 320 px de ancho.
+  evitar: Anchos fijos en px que obligan a desplazarse en horizontal para leer.
+
+- id: A11Y-MOVIMIENTO
+  dimension: D1
+  titulo: Respeta «reducir movimiento»
+  severidad: alta
+  tipo: auto
+  norma: WCAG 2.2 · 2.3.3 Animación por interacción / Apple Reduced Motion
+  kb: Reduced Motion
+  hacer: "Desactiva o reduce las animaciones con @media (prefers-reduced-motion: reduce)."
+  evitar: Animaciones continuas que ignoran la preferencia del sistema.
+
+- id: A11Y-AXE-OTRAS
+  dimension: D1
+  titulo: Otras incidencias de accesibilidad (axe-core)
+  severidad: media
+  tipo: auto
+  norma: WCAG 2.2 (varios criterios)
+  kb: Screen Reader
+  hacer: Revisa cada incidencia y aplica la corrección indicada por axe-core.
+  evitar: Ignorar avisos automáticos sin verificarlos manualmente.
+
+# ───────────────────── D2 · USABILIDAD E INTERACCIÓN ─────────────────────
+- id: INT-OBJETIVO-WCAG
+  dimension: D2
+  titulo: Tamaño mínimo de objetivo (24×24 px)
+  severidad: alta
+  tipo: auto
+  norma: WCAG 2.2 · 2.5.8 Tamaño del objetivo (mínimo)
+  kb: Target Size (Minimum)
+  hacer: Que cada objetivo mida al menos 24×24 px o tenga separación suficiente de los demás.
+  evitar: Iconos de 16 px pegados entre sí.
+
+- id: INT-OBJETIVO-TACTIL
+  dimension: D2
+  titulo: Objetivos táctiles cómodos (44×44 px)
+  severidad: media
+  tipo: auto
+  viewports: movil
+  norma: Apple HIG 44 pt · Material Design 48 dp · ley de Fitts
+  kb: Touch Target Size
+  hacer: En móvil, botones y enlaces de navegación de al menos 44×44 px (amplía el área con padding).
+  evitar: Botones pequeños que obligan a pulsar con precisión.
+
+- id: INT-ESPACIADO
+  dimension: D2
+  titulo: Separación entre objetivos táctiles (≥ 8 px)
+  severidad: media
+  tipo: auto
+  viewports: movil
+  norma: Apple HIG · Material Design
+  kb: Touch Spacing
+  hacer: Deja al menos 8 px entre controles pequeños.
+  evitar: Controles pequeños adyacentes que provocan pulsaciones erróneas.
+
+- id: INT-CLIC-NO-SEMANTICO
+  dimension: D2
+  titulo: Elementos clicables sin semántica de control
+  severidad: alta
+  tipo: auto
+  norma: WCAG 2.2 · 2.1.1 / 4.1.2 · ISO 9241-110 conformidad con expectativas
+  kb: Keyboard Navigation
+  hacer: Usa <button> o <a href> para todo lo que responde a un clic.
+  evitar: <div onclick> o <span> con cursor:pointer sin role ni tabindex.
+
+- id: INT-CURSOR
+  dimension: D2
+  titulo: Cursor de mano en elementos clicables
+  severidad: baja
+  tipo: auto
+  viewports: escritorio
+  norma: Guía UI UX Pro Max (cursor-pointer)
+  kb: Hover States
+  hacer: Aplica cursor:pointer a botones y controles clicables.
+  evitar: Botones con cursor de flecha que no parecen interactivos.
+
+- id: MAN-ESTADO-SISTEMA
+  dimension: D2
+  titulo: "H1 Nielsen: visibilidad del estado del sistema"
+  severidad: alta
+  tipo: manual
+  norma: Nielsen H1 · ISO 9241-110 autodescripción
+  kb: Loading Indicators
+  pregunta: ¿El sistema informa siempre de lo que está pasando (cargas, envíos, progreso) en menos de 1 s?
+  hacer: Muestra indicadores de carga, progreso y confirmación de cada acción.
+  evitar: Acciones sin respuesta visible.
+
+- id: MAN-CONTROL-LIBERTAD
+  dimension: D2
+  titulo: "H3 Nielsen: control y libertad del usuario"
+  severidad: alta
+  tipo: manual
+  norma: Nielsen H3 · ISO 9241-110 controlabilidad
+  kb: User Freedom
+  pregunta: ¿Puede el usuario cancelar, deshacer o volver atrás en todos los flujos y ventanas modales?
+  hacer: Ofrece Cancelar, Deshacer y Volver; los modales se cierran con Esc.
+  evitar: Flujos sin salida o acciones irreversibles sin confirmación.
+
+- id: MAN-FLEXIBILIDAD
+  dimension: D2
+  titulo: "H7 Nielsen: flexibilidad y eficiencia de uso"
+  severidad: baja
+  tipo: manual
+  norma: Nielsen H7 · Shneiderman (atajos)
+  kb: Autocomplete
+  pregunta: ¿Hay atajos, autocompletado o valores por defecto que aceleren a los usuarios frecuentes?
+  hacer: Atajos de teclado, autocompletado y recordar preferencias.
+  evitar: Obligar a repetir siempre el mismo camino largo.
+
+- id: MAN-HOVER
+  dimension: D2
+  titulo: Nada importante depende solo del hover
+  severidad: media
+  tipo: manual
+  norma: Guía UI UX Pro Max (hover-vs-tap)
+  kb: Hover vs Tap
+  pregunta: ¿Toda la información y acciones que aparecen al pasar el ratón están disponibles también en táctil y teclado?
+  hacer: Usa clic/tap para las acciones principales.
+  evitar: Menús o información que solo aparecen con hover.
+
+# ───────────────────────── D3 · RENDIMIENTO ─────────────────────────
+- id: PERF-LCP
+  dimension: D3
+  titulo: Carga del contenido principal (LCP)
+  severidad: alta
+  tipo: metrica
+  norma: Core Web Vitals · LCP ≤ 2,5 s
+  kb: Image Optimization
+  hacer: Optimiza la imagen o bloque principal (formato moderno, preload, servidor rápido).
+  evitar: Imágenes hero pesadas o CSS/JS que bloquean el renderizado.
+
+- id: PERF-CLS
+  dimension: D3
+  titulo: Estabilidad visual (CLS)
+  severidad: alta
+  tipo: metrica
+  norma: Core Web Vitals · CLS ≤ 0,1
+  kb: Content Jumping
+  hacer: Reserva espacio para imágenes, anuncios y contenido asíncrono (width/height o aspect-ratio).
+  evitar: Insertar contenido por encima del que el usuario ya está viendo.
+
+- id: PERF-TBT
+  dimension: D3
+  titulo: Capacidad de respuesta (TBT, aproximación de INP en laboratorio)
+  severidad: alta
+  tipo: metrica
+  norma: Core Web Vitals · INP ≤ 200 ms (TBT de laboratorio ≤ 200 ms)
+  kb: Code Splitting
+  hacer: Divide el JavaScript, difiere scripts de terceros y evita tareas largas (> 50 ms).
+  evitar: Bundles enormes que bloquean el hilo principal durante la carga.
+
+- id: PERF-PESO
+  dimension: D3
+  titulo: Peso total de la página
+  severidad: media
+  tipo: metrica
+  norma: Web Sustainability Guidelines · buenas prácticas de rendimiento
+  kb: Asset Weight
+  hacer: Mantén la página por debajo de 1,6 MB transferidos; comprime y elimina recursos no usados.
+  evitar: Vídeos, fuentes e imágenes sin optimizar.
+
+- id: PERF-IMG-DIMENSIONES
+  dimension: D3
+  titulo: Imágenes con dimensiones reservadas
+  severidad: media
+  tipo: auto
+  norma: Core Web Vitals · CLS
+  kb: Content Jumping
+  hacer: Indica width y height (o aspect-ratio) en cada imagen.
+  evitar: Imágenes sin dimensiones que desplazan el contenido al cargar.
+
+- id: PERF-IMG-LAZY
+  dimension: D3
+  titulo: Carga diferida de imágenes fuera de pantalla
+  severidad: baja
+  tipo: auto
+  norma: Buenas prácticas web.dev
+  kb: Lazy Loading
+  hacer: Añade loading="lazy" a las imágenes que no se ven al cargar.
+  evitar: Descargar todas las imágenes de la página al inicio.
+
+- id: PERF-IMG-FORMATO
+  dimension: D3
+  titulo: Imágenes en formato moderno
+  severidad: media
+  tipo: auto
+  norma: Buenas prácticas web.dev
+  kb: Image Optimization
+  hacer: Sirve WebP o AVIF para imágenes de más de 100 KB.
+  evitar: PNG/JPEG/GIF pesados sin comprimir.
+
+- id: PERF-IMG-SOBREDIMENSION
+  dimension: D3
+  titulo: Imágenes sobredimensionadas
+  severidad: media
+  tipo: auto
+  norma: Buenas prácticas web.dev (srcset/sizes)
+  kb: Image Scaling
+  hacer: Usa srcset/sizes para servir la resolución adecuada a cada pantalla.
+  evitar: Imágenes de 4000 px mostradas a 300 px.
+
+- id: PERF-FUENTES
+  dimension: D3
+  titulo: Fuentes web sin texto invisible
+  severidad: baja
+  tipo: auto
+  norma: Buenas prácticas web.dev (font-display)
+  kb: Font Loading
+  hacer: Usa font-display:swap u optional en las @font-face.
+  evitar: Texto invisible mientras se descarga la fuente (FOIT).
+
+# ─────────────────── D4 · DISEÑO VISUAL Y CONSISTENCIA ───────────────────
+- id: VIS-TAM-TEXTO
+  dimension: D4
+  titulo: Texto de al menos 12 px
+  severidad: alta
+  tipo: auto
+  norma: Guía UI UX Pro Max (Typography & Color)
+  kb: Readable Font Size
+  hacer: Ningún texto por debajo de 12 px.
+  evitar: Letra diminuta en avisos legales o etiquetas.
+
+- id: VIS-TEXTO-BASE
+  dimension: D4
+  titulo: Tamaño base del texto en móvil (≥ 16 px)
+  severidad: media
+  tipo: auto
+  viewports: movil
+  norma: Material Design · Apple HIG · Guía UI UX Pro Max
+  kb: Readable Font Size
+  hacer: Texto de lectura de 16 px como mínimo en móvil.
+  evitar: Párrafos de 12–14 px que obligan a hacer zoom.
+
+- id: VIS-INTERLINEADO
+  dimension: D4
+  titulo: Interlineado legible (≥ 1,4)
+  severidad: media
+  tipo: auto
+  norma: WCAG 2.2 · 1.4.12 Espaciado del texto (referencia)
+  kb: Line Height
+  hacer: line-height entre 1,4 y 1,6 en párrafos.
+  evitar: line-height 1 o «normal» en bloques largos.
+
+- id: VIS-LONGITUD-LINEA
+  dimension: D4
+  titulo: Longitud de línea cómoda (≤ 90 caracteres)
+  severidad: baja
+  tipo: auto
+  viewports: escritorio
+  norma: Tipografía clásica · Guía UI UX Pro Max
+  kb: Line Length
+  hacer: Limita el ancho del texto (p. ej. max-width:70ch).
+  evitar: Párrafos que ocupan todo el ancho de una pantalla grande.
+
+- id: VIS-FUENTES
+  dimension: D4
+  titulo: Número de familias tipográficas (≤ 3)
+  severidad: baja
+  tipo: auto
+  norma: Sistemas de diseño · consistencia (Nielsen H4)
+  kb: Font Size Scale
+  hacer: Una o dos familias (títulos y texto) más, como mucho, una monoespaciada.
+  evitar: Mezclar muchas fuentes sin criterio.
+
+- id: VIS-COLORES-TEXTO
+  dimension: D4
+  titulo: Paleta de colores de texto consistente
+  severidad: baja
+  tipo: auto
+  norma: Design tokens (W3C DTCG) · consistencia
+  kb: Color Contrast
+  hacer: Define tokens semánticos de color y reutilízalos.
+  evitar: Decenas de grises y colores distintos escritos a mano.
+
+- id: VIS-EMOJI-ICONOS
+  dimension: D4
+  titulo: Iconos SVG en lugar de emojis
+  severidad: media
+  tipo: auto
+  norma: Guía UI UX Pro Max (no emoji icons)
+  kb: Screen Reader
+  hacer: Usa iconos SVG coherentes (Lucide, Heroicons, Phosphor).
+  evitar: "Emojis como iconos de botones o menús: cambian según el sistema y los lectores de pantalla los leen en voz alta."
+
+- id: VIS-DESBORDAMIENTO
+  dimension: D4
+  titulo: Sin scroll horizontal en el viewport
+  severidad: alta
+  tipo: auto
+  norma: Guía UI UX Pro Max (Horizontal Scroll)
+  kb: Horizontal Scroll
+  hacer: Contenedores con max-width:100% y diseño adaptable.
+  evitar: Elementos más anchos que la pantalla.
+
+- id: MAN-CONSISTENCIA
+  dimension: D4
+  titulo: "H4 Nielsen: consistencia y estándares"
+  severidad: media
+  tipo: manual
+  norma: Nielsen H4 · ley de Jakob
+  kb: Active States
+  pregunta: ¿Los mismos elementos se ven y se comportan igual en todas las pantallas y siguen las convenciones habituales?
+  hacer: Un sistema de diseño con componentes reutilizables.
+  evitar: Botones o textos que cambian de estilo y significado entre pantallas.
+
+- id: MAN-MINIMALISMO
+  dimension: D4
+  titulo: "H8 Nielsen: diseño estético y minimalista"
+  severidad: media
+  tipo: manual
+  norma: Nielsen H8 · Gestalt
+  kb: Excessive Motion
+  pregunta: ¿Cada pantalla muestra solo la información relevante, con una jerarquía visual clara?
+  hacer: Prioriza el contenido y usa el espacio en blanco para agrupar.
+  evitar: Pantallas sobrecargadas que compiten por la atención.
+
+# ─────────────────────── D5 · FORMULARIOS Y FEEDBACK ───────────────────────
+- id: FORM-ETIQUETA-VISIBLE
+  dimension: D5
+  titulo: Etiquetas visibles (no solo placeholder)
+  severidad: alta
+  tipo: auto
+  norma: WCAG 2.2 · 3.3.2 · GOV.UK Design System
+  kb: Input Labels
+  hacer: Etiqueta visible encima de cada campo.
+  evitar: "Placeholder como única etiqueta: desaparece al escribir."
+
+- id: FORM-AUTOCOMPLETE
+  dimension: D5
+  titulo: Autocompletado en datos personales
+  severidad: media
+  tipo: auto
+  norma: WCAG 2.2 · 1.3.5 Identificar el propósito de la entrada
+  kb: Autofill Support
+  hacer: Añade autocomplete="email", "name", "tel", "current-password"…
+  evitar: autocomplete="off" en campos de datos personales o contraseñas.
+
+- id: FORM-TIPO-ENTRADA
+  dimension: D5
+  titulo: Tipo de campo adecuado (teclado móvil)
+  severidad: media
+  tipo: auto
+  norma: Guía UI UX Pro Max (Input Types / Mobile Keyboards)
+  kb: Input Types
+  hacer: Usa type="email", type="tel" o inputmode="numeric" para mostrar el teclado correcto.
+  evitar: type="text" para correos o teléfonos.
+
+- id: FORM-PEGAR
+  dimension: D5
+  titulo: Se permite pegar en contraseñas y correos
+  severidad: critica
+  tipo: auto
+  norma: WCAG 2.2 · 3.3.8 Autenticación accesible (mínimo)
+  kb: Accessible Authentication (Minimum)
+  hacer: Permite pegar y los gestores de contraseñas.
+  evitar: Bloquear el evento paste en campos de acceso.
+
+- id: FORM-GRUPOS
+  dimension: D5
+  titulo: Grupos de opciones con leyenda
+  severidad: media
+  tipo: auto
+  norma: WCAG 2.2 · 1.3.1 · GOV.UK
+  kb: Form Labels
+  hacer: Agrupa radios y casillas en <fieldset> con <legend>.
+  evitar: Opciones sueltas sin la pregunta que responden.
+
+- id: FORM-ENVIO
+  dimension: D5
+  titulo: Formularios con botón de envío
+  severidad: baja
+  tipo: auto
+  norma: Heurística Nielsen H1 · HTML
+  kb: Submit Feedback
+  hacer: Incluye un botón de envío explícito (<button type="submit">).
+  evitar: Formularios que solo se envían pulsando Intro.
+
+- id: MAN-PREVENCION-ERRORES
+  dimension: D5
+  titulo: "H5 Nielsen: prevención de errores"
+  severidad: alta
+  tipo: manual
+  norma: Nielsen H5 · ISO 9241-110 tolerancia a errores
+  kb: Inline Validation
+  pregunta: ¿Se previenen los errores (formatos de ejemplo, validación al salir del campo, confirmación de acciones destructivas)?
+  hacer: Validación en línea, ejemplos de formato y confirmación de acciones peligrosas.
+  evitar: Descubrir los errores solo al enviar.
+
+- id: MAN-RECUPERACION-ERRORES
+  dimension: D5
+  titulo: "H9 Nielsen: reconocer, diagnosticar y recuperarse de errores"
+  severidad: alta
+  tipo: manual
+  norma: Nielsen H9 · WCAG 3.3.1 / 3.3.3
+  kb: Error Placement
+  pregunta: ¿Los mensajes de error aparecen junto al campo, en lenguaje claro y explican cómo solucionarlo?
+  hacer: Mensaje junto al campo, con texto (no solo color) y una solución.
+  evitar: «Error 500» o un borde rojo sin explicación.
+
+- id: MAN-RESUMEN-ERRORES
+  dimension: D5
+  titulo: Resumen de errores enfocable
+  severidad: alta
+  tipo: manual
+  norma: GOV.UK Design System · WCAG 3.3.1
+  kb: Focusable Error Summary
+  pregunta: Al enviar un formulario con errores, ¿aparece un resumen al principio que recibe el foco y enlaza a cada campo?
+  hacer: Resumen con role="alert", foco en su título y enlaces a los campos.
+  evitar: Solo un toast o solo errores dispersos sin resumen.
+
+# ─────────────────── D6 · NAVEGACIÓN Y ARQUITECTURA ───────────────────
+- id: NAV-TITULO
+  dimension: D6
+  titulo: Título de página descriptivo
+  severidad: media
+  tipo: auto
+  norma: WCAG 2.2 · 2.4.2 Titulado de páginas
+  kb: Deep Linking
+  hacer: Título único y descriptivo de 10–70 caracteres («Reservas · Restaurante Mar»).
+  evitar: Títulos vacíos o genéricos («Document», «React App», «Inicio»).
+
+- id: NAV-LANDMARKS
+  dimension: D6
+  titulo: Regiones principales (main, nav)
+  severidad: media
+  tipo: auto
+  norma: WCAG 2.2 · 1.3.1 / 2.4.1 · WAI-ARIA landmarks
+  kb: Skip Links
+  hacer: Un único <main> y la navegación dentro de <nav>.
+  evitar: Páginas construidas solo con <div>.
+
+- id: NAV-SALTAR
+  dimension: D6
+  titulo: Enlace «saltar al contenido»
+  severidad: media
+  tipo: auto
+  viewports: escritorio
+  norma: WCAG 2.2 · 2.4.1 Evitar bloques
+  kb: Skip Links
+  hacer: Primer elemento enfocable = enlace al <main> (visible al recibir el foco).
+  evitar: Obligar a recorrer todo el menú con Tab en cada página.
+
+- id: NAV-ANCLAS-ROTAS
+  dimension: D6
+  titulo: Enlaces internos con destino válido
+  severidad: media
+  tipo: auto
+  norma: HTML · Nielsen H4
+  kb: Deep Linking
+  hacer: Que cada href="#id" apunte a un id existente; usa <button> para acciones.
+  evitar: href="#" o javascript:void(0) como falsos enlaces.
+
+- id: NAV-TEXTO-ENLACES
+  dimension: D6
+  titulo: Texto de enlace descriptivo
+  severidad: media
+  tipo: auto
+  norma: WCAG 2.2 · 2.4.4 Propósito de los enlaces
+  kb: ARIA Labels
+  hacer: El texto del enlace dice adónde lleva («Ver la carta de postres»).
+  evitar: «Haz clic aquí», «Leer más» o «Aquí» sin contexto.
+
+- id: NAV-NUEVA-VENTANA
+  dimension: D6
+  titulo: Aviso al abrir en nueva pestaña
+  severidad: baja
+  tipo: auto
+  norma: WCAG 2.2 · 3.2.5 (AAA) · Nielsen H3
+  kb: User Freedom
+  hacer: Indica «(se abre en una pestaña nueva)» en el texto, aria-label o con un icono etiquetado.
+  evitar: Abrir pestañas nuevas por sorpresa.
+
+- id: NAV-MENU
+  dimension: D6
+  titulo: Menús de navegación de tamaño razonable (≤ 7)
+  severidad: media
+  tipo: auto
+  viewports: escritorio
+  norma: Ley de Hick-Hyman · ley de Miller
+  kb: Sticky Navigation
+  hacer: Como máximo 7 opciones en el primer nivel; agrupa el resto.
+  evitar: Menús con 12 opciones al mismo nivel.
+
+- id: NAV-BARRA-INFERIOR
+  dimension: D6
+  titulo: Barra inferior móvil con ≤ 5 opciones
+  severidad: media
+  tipo: auto
+  viewports: movil
+  norma: Material Design (navigation bar 3–5) · Apple HIG (tab bar)
+  kb: Back Button
+  hacer: Entre 3 y 5 destinos en la barra inferior.
+  evitar: Barras inferiores saturadas con iconos diminutos.
+
+- id: MAN-MUNDO-REAL
+  dimension: D6
+  titulo: "H2 Nielsen: lenguaje del usuario"
+  severidad: media
+  tipo: manual
+  norma: Nielsen H2
+  kb: Placeholder Content
+  pregunta: ¿Los textos y menús usan palabras y conceptos del usuario, no jerga técnica o interna?
+  hacer: Lenguaje claro y familiar para el público objetivo.
+  evitar: Códigos internos, tecnicismos y anglicismos innecesarios.
+
+- id: MAN-RECONOCER
+  dimension: D6
+  titulo: "H6 Nielsen: reconocer antes que recordar"
+  severidad: media
+  tipo: manual
+  norma: Nielsen H6 · ley de Miller
+  kb: Active State
+  pregunta: ¿El usuario sabe siempre dónde está (menú activo, migas de pan) sin tener que recordar pasos anteriores?
+  hacer: Estado activo en el menú, migas de pan y opciones visibles.
+  evitar: Obligar a recordar información de una pantalla a otra.
+
+- id: MAN-AYUDA
+  dimension: D6
+  titulo: "H10 Nielsen: ayuda y documentación"
+  severidad: baja
+  tipo: manual
+  norma: Nielsen H10 · WCAG 3.2.6 Ayuda consistente
+  kb: Consistent Help
+  pregunta: ¿Hay ayuda o contacto fácil de encontrar y siempre en el mismo lugar?
+  hacer: Ayuda contextual y un acceso de contacto fijo.
+  evitar: Ayuda escondida o que cambia de sitio.
+
+# ───────────────────── D7 · SATISFACCIÓN PERCIBIDA ─────────────────────
+- id: SAT-SUS
+  dimension: D7
+  titulo: Satisfacción de usuarios (SUS)
+  severidad: alta
+  tipo: metrica
+  norma: SUS (Brooke) · ISO 9241-11 satisfacción
+  kb: User Freedom
+  hacer: Prueba con al menos 5 usuarios; una puntuación SUS ≥ 68 está por encima de la media.
+  evitar: Diseñar sin validar con usuarios reales.
+
+# ═════════════ HUECOS DEL ESTADO DEL ARTE (v2) ═════════════
+# Comprobaciones que no hacen Lighthouse, axe-core, WAVE ni Pa11y.
+
+# D1 · Accesibilidad (nivel de interacción y adaptación real)
+- id: A11Y-ESPACIADO-TEXTO
+  dimension: D1
+  titulo: "Soporta el espaciado de texto del usuario"
+  severidad: alta
+  tipo: auto
+  norma: "WCAG 2.2 · 1.4.12 Espaciado del texto (AA)"
+  kb: Text Reflow and Spacing
+  hacer: "Usa alturas automáticas (min-height en lugar de height) para que el texto pueda crecer sin cortarse con interlineado 1,5, espaciado entre letras 0,12 em, entre palabras 0,16 em y entre párrafos 2 em."
+  evitar: "Cajas de alto fijo con overflow:hidden que recortan o solapan el texto."
+
+- id: A11Y-TAMANO-USUARIO
+  dimension: D1
+  titulo: "Respeta el tamaño de letra elegido por el usuario"
+  severidad: alta
+  tipo: auto
+  viewports: escritorio
+  norma: "WCAG 2.2 · 1.4.4 Cambio de tamaño del texto (AA) · Apple Dynamic Type"
+  kb: Readable Font Size
+  hacer: "Define los tamaños de letra en rem o em (font-size: 100% en html) para que escalen con la preferencia del navegador."
+  evitar: "Tamaños de letra en px fijos que ignoran la configuración de tamaño de letra del usuario."
+
+- id: A11Y-ALTO-CONTRASTE
+  dimension: D1
+  titulo: "Foco visible en modo de alto contraste (colores forzados)"
+  severidad: alta
+  tipo: auto
+  viewports: escritorio
+  norma: "WCAG 2.2 · 2.4.7 Foco visible · 1.4.11 Contraste no textual · CSS forced-colors"
+  kb: Focus Appearance
+  hacer: "Usa outline (con outline-color transparent si hace falta) en lugar de solo box-shadow o cambios de fondo, que desaparecen en el modo de alto contraste de Windows."
+  evitar: "Indicadores de foco hechos solo con box-shadow o color de fondo."
+
+- id: A11Y-MODO-OSCURO
+  dimension: D1
+  titulo: "Contraste suficiente también en modo oscuro"
+  severidad: alta
+  tipo: auto
+  norma: "WCAG 2.2 · 1.4.3 Contraste (mínimo) aplicado a prefers-color-scheme: dark"
+  kb: Color Contrast
+  hacer: "Revisa los tokens de color del tema oscuro: el texto debe mantener 4,5:1 sobre el fondo oscuro."
+  evitar: "Cambiar el fondo a oscuro y olvidar adaptar textos grises, enlaces o bordes."
+
+- id: A11Y-ORDEN-FOCO
+  dimension: D1
+  titulo: "Orden del foco coherente con el orden visual"
+  severidad: alta
+  tipo: auto
+  viewports: escritorio
+  norma: "WCAG 2.2 · 2.4.3 Orden del foco (A)"
+  kb: Keyboard Navigation
+  hacer: "Que el orden del HTML coincida con el visual; evita reordenar con CSS (order, flex-direction: reverse, position absolute) los controles interactivos."
+  evitar: "Saltos del foco hacia arriba dentro de la misma columna o tabindex positivos."
+
+- id: A11Y-NOMBRE-EN-ETIQUETA
+  dimension: D1
+  titulo: "El nombre accesible incluye el texto visible"
+  severidad: alta
+  tipo: auto
+  norma: "WCAG 2.2 · 2.5.3 Etiqueta en el nombre (A)"
+  kb: ARIA Labels
+  hacer: "Si un control tiene aria-label, debe empezar por (o contener) el texto que se ve, para que funcione el control por voz («pulsa Comprar»)."
+  evitar: "Botones que muestran «Comprar» con aria-label=\"Añadir producto 23\"."
+
+- id: A11Y-CALIDAD-ALT
+  dimension: D1
+  titulo: "Textos alternativos útiles (no solo presentes)"
+  severidad: alta
+  tipo: auto
+  norma: "WCAG 2.2 · 1.1.1 Contenido no textual (A) · W3C Alt Decision Tree"
+  kb: Alt Text
+  hacer: "Describe la información o función de la imagen en menos de 150 caracteres."
+  evitar: "alt con el nombre del fichero (IMG_2034.jpg), palabras genéricas (imagen, foto, logo) o «imagen de…»."
+
+- id: A11Y-MULTIMEDIA
+  dimension: D1
+  titulo: "Vídeo y audio controlables y subtitulados"
+  severidad: alta
+  tipo: auto
+  norma: "WCAG 2.2 · 1.2.2 Subtítulos · 1.4.2 Control del audio · 2.2.2 Poner en pausa"
+  kb: Auto-Play Video
+  hacer: "Vídeos con controles, subtítulos (<track kind=\"captions\">) y sin reproducción automática con sonido."
+  evitar: "Vídeos que arrancan solos con sonido o sin forma de pausarlos."
+
+- id: A11Y-ORIENTACION
+  dimension: D1
+  titulo: "Funciona en horizontal y en vertical"
+  severidad: alta
+  tipo: auto
+  viewports: movil
+  norma: "WCAG 2.2 · 1.3.4 Orientación (AA)"
+  kb: Breakpoint Testing
+  hacer: "Que el contenido se vea y funcione con el móvil girado, sin pedir «gira tu dispositivo»."
+  evitar: "Bloquear la orientación o esconder el contenido en horizontal."
+
+- id: MAN-CONTENIDO-HOVER
+  dimension: D1
+  titulo: "Contenido emergente al pasar el ratón o enfocar"
+  severidad: media
+  tipo: manual
+  norma: "WCAG 2.2 · 1.4.13 Contenido con hover o foco (AA)"
+  kb: Hover vs Tap
+  pregunta: "¿Los tooltips y menús emergentes se pueden cerrar con Esc, permiten mover el ratón encima sin desaparecer y no se ocultan solos?"
+  hacer: "Contenido emergente descartable (Esc), sobre el que se puede pasar el puntero y persistente."
+  evitar: "Tooltips que desaparecen al intentar leerlos o que tapan contenido sin poder cerrarlos."
+
+- id: MAN-GESTION-FOCO
+  dimension: D1
+  titulo: "Gestión del foco en ventanas modales y cambios de página"
+  severidad: alta
+  tipo: manual
+  norma: "WCAG 2.2 · 2.4.3 Orden del foco · 2.1.2 · WAI-ARIA APG (dialog)"
+  kb: Focus States
+  pregunta: "Al abrir un modal, ¿el foco entra en él, queda contenido dentro y vuelve al botón de origen al cerrarlo? En una SPA, ¿se mueve el foco al nuevo contenido al cambiar de vista?"
+  hacer: "Mueve el foco al abrir/cerrar diálogos y al cambiar de vista; usa <dialog> o el patrón APG."
+  evitar: "Modales en los que el foco se queda detrás o se pierde al cerrarlos."
+
+# D2 · Usabilidad
+- id: INT-CTA-COMPITEN
+  dimension: D2
+  titulo: "Una llamada a la acción principal clara"
+  severidad: media
+  tipo: auto
+  norma: "Ley de Hick-Hyman · Nielsen H8 · jerarquía visual"
+  hacer: "Destaca una sola acción principal por pantalla; el resto, como secundarias (contorno o enlace)."
+  evitar: "Tres o más botones con el mismo relleno compitiendo en la primera pantalla."
+
+# D4 · Diseño visual y contenido
+- id: VIS-RESPONSIVE-INTERMEDIO
+  dimension: D4
+  titulo: "Sin roturas en tamaños intermedios (tablet, móvil horizontal)"
+  severidad: alta
+  tipo: auto
+  norma: "WCAG 2.2 · 1.4.10 Reflujo · Guía UI UX Pro Max (Breakpoint Testing)"
+  kb: Breakpoint Testing
+  hacer: "Prueba y corrige los anchos 600, 768, 1024 y 1280 px y el móvil en horizontal."
+  evitar: "Diseñar solo para 375 px y 1440 px: los tamaños intermedios suelen desbordar."
+
+- id: VIS-LEGIBILIDAD
+  dimension: D4
+  titulo: "Lenguaje claro (índice de legibilidad)"
+  severidad: media
+  tipo: metrica
+  norma: "WCAG 2.2 · 3.1.5 Nivel de lectura (AAA) · Fernández-Huerta / Flesch · ISO 24495-1 Lenguaje claro"
+  hacer: "Frases de menos de 20 palabras, palabras comunes y voz activa. Objetivo: índice ≥ 70 en español (bastante fácil)."
+  evitar: "Párrafos largos con jerga, frases subordinadas encadenadas y tecnicismos sin explicar."
+
+- id: VIS-TEXTO-COGNITIVO
+  dimension: D4
+  titulo: "Texto sin justificar, sin bloques en mayúsculas ni cursiva larga"
+  severidad: media
+  tipo: auto
+  norma: "WCAG 2.2 · 1.4.8 Presentación visual (AAA) · W3C COGA · guía de estilo de dislexia (BDA)"
+  hacer: "Alinea el texto a la izquierda y reserva las mayúsculas y la cursiva para textos muy cortos."
+  evitar: "Párrafos justificados, en MAYÚSCULAS o en cursiva: dificultan la lectura a personas con dislexia."
+
+# D5 · Formularios
+- id: FORM-OBLIGATORIOS
+  dimension: D5
+  titulo: "Campos obligatorios indicados visualmente y en el código"
+  severidad: alta
+  tipo: auto
+  norma: "WCAG 2.2 · 3.3.2 Etiquetas o instrucciones · 1.3.1"
+  kb: Required Indicators
+  hacer: "Marca los campos obligatorios en la etiqueta («(obligatorio)» o * con leyenda) y añade required o aria-required."
+  evitar: "Campos required sin indicación visible, o asteriscos que el lector de pantalla no anuncia."
+
+# D6 · Navegación
+- id: NAV-CONSISTENCIA
+  dimension: D6
+  titulo: "Navegación y ayuda consistentes entre páginas"
+  severidad: alta
+  tipo: auto
+  norma: "WCAG 2.2 · 3.2.3 Navegación coherente · 3.2.4 Identificación coherente · 3.2.6 Ayuda consistente"
+  kb: Consistent Help
+  hacer: "Mantén el mismo menú, en el mismo orden, y el enlace de ayuda/contacto en el mismo sitio en todas las páginas."
+  evitar: "Menús que cambian de orden o de nombre según la página."
+
+# D8 · Ética, privacidad y sostenibilidad (nueva dimensión)
+- id: ETI-COOKIES-RECHAZO
+  dimension: D8
+  titulo: "Rechazar cookies tan fácil como aceptarlas"
+  severidad: critica
+  tipo: auto
+  norma: "AEPD Guía sobre cookies (2023) · RGPD art. 7 · Directrices EDPB 03/2022 sobre patrones engañosos"
+  hacer: "Botón «Rechazar» en la primera capa, al mismo nivel, con el mismo tamaño, color y tipo de letra que «Aceptar»."
+  evitar: "Solo «Aceptar» y «Configurar», o un «Rechazar» escondido como enlace pequeño."
+
+- id: ETI-PRESELECCION
+  dimension: D8
+  titulo: "Sin casillas de consentimiento premarcadas"
+  severidad: critica
+  tipo: auto
+  norma: "RGPD art. 4.11 y 7 · TJUE C-673/17 (Planet49) · DSA art. 25"
+  hacer: "Las casillas de newsletter, publicidad o cesión a terceros deben estar desmarcadas por defecto."
+  evitar: "Consentimientos y suscripciones marcados de antemano."
+
+- id: ETI-CONFIRMSHAMING
+  dimension: D8
+  titulo: "Sin textos que culpabilicen al rechazar (confirmshaming)"
+  severidad: alta
+  tipo: auto
+  norma: "DSA art. 25 · Directrices EDPB 03/2022 · Directiva 2005/29/CE (prácticas comerciales desleales)"
+  hacer: "Opciones neutras: «No, gracias» o «Ahora no»."
+  evitar: "«No, prefiero pagar más», «No me importa ahorrar»."
+
+- id: ETI-URGENCIA
+  dimension: D8
+  titulo: "Sin urgencia o escasez artificial"
+  severidad: media
+  tipo: auto
+  norma: "Directiva 2005/29/CE anexo I (7) · barrido de la Comisión Europea 2023 (42 tiendas con temporizadores falsos)"
+  hacer: "Muestra plazos y existencias solo si son reales y verificables."
+  evitar: "Cuentas atrás que se reinician, «solo quedan 2» o «15 personas lo están viendo» inventados."
+
+- id: ETI-RASTREO-PREVIO
+  dimension: D8
+  titulo: "Sin rastreo antes del consentimiento"
+  severidad: critica
+  tipo: auto
+  norma: "LSSI art. 22.2 · Directiva ePrivacy art. 5.3 · RGPD art. 6 · Guía de cookies AEPD"
+  hacer: "No cargues analítica, píxeles de publicidad ni cookies no técnicas hasta que el usuario acepte."
+  evitar: "Google Analytics, Meta Pixel, Hotjar o cookies _ga/_fbp que se activan al abrir la página."
+
+- id: ETI-CARBONO
+  dimension: D8
+  titulo: "Huella de carbono por visita"
+  severidad: media
+  tipo: metrica
+  norma: "W3C Web Sustainability Guidelines · Sustainable Web Design Model v4 (calificación A+–F)"
+  kb: Asset Weight
+  hacer: "Reduce el peso transferido: imágenes AVIF/WebP, sin vídeos automáticos, menos JavaScript y fuentes del sistema."
+  evitar: "Páginas de varios MB para mostrar poco contenido."
+
+- id: MAN-COSTES-OCULTOS
+  dimension: D8
+  titulo: "Precio total y condiciones visibles desde el principio"
+  severidad: alta
+  tipo: manual
+  norma: "Directiva 2011/83/UE art. 6 · Directiva 2005/29/CE · barrido CE 2023 (70 tiendas ocultaban información)"
+  pregunta: "¿El precio final (impuestos, envío, comisiones) y las condiciones se ven antes del último paso de compra, sin sorpresas?"
+  hacer: "Muestra el precio total y los gastos desde la ficha del producto."
+  evitar: "Gastos de envío o comisiones que aparecen solo al pagar."
+
+- id: MAN-CANCELACION
+  dimension: D8
+  titulo: "Darse de baja tan fácil como darse de alta"
+  severidad: alta
+  tipo: manual
+  norma: "Directiva (UE) 2023/2673 (botón de desistimiento) · DSA art. 25 · FTC Click-to-Cancel"
+  pregunta: "¿Cancelar una suscripción, borrar la cuenta o retirar el consentimiento se hace en línea y con los mismos pasos (o menos) que contratarlo?"
+  hacer: "Botón de baja visible en la cuenta, sin llamadas ni formularios extra."
+  evitar: "Laberintos de baja (roach motel) o retención con varias pantallas de «¿seguro?»."
+
+- id: MAN-IA-TRANSPARENCIA
+  dimension: D8
+  titulo: "Transparencia de la inteligencia artificial"
+  severidad: media
+  tipo: manual
+  norma: "Reglamento (UE) 2024/1689 de IA, art. 50 (aplicable desde agosto de 2026) · Microsoft HAX G1-G2"
+  kb: Disclaimer
+  pregunta: "Si hay chatbots o contenido generado por IA, ¿se indica claramente que es IA, qué puede hacer y cómo hablar con una persona? (Responde no_aplica si no hay IA.)"
+  hacer: "Avisa «Estás hablando con un asistente de IA», explica sus límites y ofrece contacto humano."
+  evitar: "Bots que se hacen pasar por personas o contenido sintético sin etiquetar."
+
+# ═════════════ STEVE KRUG · «No me hagas pensar» (2014) y «Haz fácil lo imposible» (2010) ═════════════
+- id: NAV-PRUEBA-TRONCO
+  dimension: D6
+  titulo: "Prueba del tronco de Krug (¿qué sitio es, dónde estoy, qué secciones hay?)"
+  severidad: alta
+  tipo: auto
+  norma: "Krug, No me hagas pensar, cap. 6 (trunk test) · WCAG 2.4.8 Ubicación (AAA)"
+  kb: Active State
+  hacer: "En cualquier página deben verse a simple vista el logotipo enlazado a la portada, el título de la página, las secciones principales, la sección actual marcada (aria-current o migas de pan) y, en sitios grandes, un buscador."
+  evitar: "Páginas en las que, al aterrizar desde un buscador, no se sabe en qué sitio ni en qué sección se está."
+
+- id: FORM-FORMATO-LIBRE
+  dimension: D5
+  titulo: "No castiga al usuario por escribir los datos a su manera"
+  severidad: media
+  tipo: auto
+  norma: "Krug, No me hagas pensar, cap. 11 (reserva de buena voluntad) · Nielsen H5 · WCAG 3.3.3"
+  kb: Input Types
+  hacer: "Acepta espacios, guiones y prefijos en teléfonos, tarjetas e IBAN y límpialos en el servidor."
+  evitar: "pattern o maxlength que obligan a escribir «600123456» sin espacios."
+
+- id: INT-ENLACES-DISTINGUIBLES
+  dimension: D2
+  titulo: "Lo que es clicable se ve que es clicable"
+  severidad: alta
+  tipo: auto
+  norma: "Krug, No me hagas pensar, cap. 3 (diseño de valla publicitaria) · WCAG 2.2 · 1.4.1 Uso del color"
+  kb: Color Only
+  axe: [link-in-text-block]
+  hacer: "Subraya los enlaces dentro del texto o diferéncialos con algo más que el color."
+  evitar: "Enlaces del mismo color que el texto y sin subrayado."
+
+- id: VIS-PALABRAS-INNECESARIAS
+  dimension: D4
+  titulo: "Sin palabras innecesarias (texto de bienvenida e instrucciones)"
+  severidad: baja
+  tipo: auto
+  norma: "Krug, No me hagas pensar, cap. 5 (omite las palabras innecesarias) · ISO 24495-1"
+  hacer: "Elimina la mitad de las palabras de cada página y luego la mitad de lo que quede; ve directo a la información."
+  evitar: "«Bienvenido a nuestra web…» o «Haga clic aquí para continuar»."
+
+- id: MAN-KRUG-EVIDENTE
+  dimension: D2
+  titulo: "Primera ley de Krug: «No me hagas pensar»"
+  severidad: alta
+  tipo: manual
+  norma: "Krug, No me hagas pensar, cap. 1-2 (las personas escanean, se conforman con lo primero razonable y salen del paso)"
+  kb: Heading Clarity
+  pregunta: "Ante cada pantalla, ¿una persona que llega por primera vez sabe qué es, qué puede hacer y qué pulsar sin pararse a pensar (nombres claros, botones evidentes, nada ambiguo)?"
+  hacer: "Que cada página sea evidente por sí misma, o al menos autoexplicativa."
+  evitar: "Nombres ingeniosos o de marketing, botones que no parecen botones y opciones que obligan a dudar."
+
+- id: MAN-KRUG-PORTADA
+  dimension: D6
+  titulo: "La portada explica qué es el sitio en segundos"
+  severidad: media
+  tipo: manual
+  norma: "Krug, No me hagas pensar, cap. 7 (la portada: lema y propuesta de valor)"
+  pregunta: "¿La portada responde en unos segundos qué es el sitio, qué ofrece, qué puedo hacer aquí y por dónde empezar?"
+  hacer: "Un lema claro, una propuesta de valor visible y un punto de partida evidente."
+  evitar: "Portadas con carruseles y eslóganes vagos que no dicen a qué se dedica la web."
+
+- id: MAN-KRUG-BUENA-VOLUNTAD
+  dimension: D2
+  titulo: "Cuida la reserva de buena voluntad del usuario"
+  severidad: media
+  tipo: manual
+  norma: "Krug, No me hagas pensar, cap. 11 (lo que la gasta y lo que la recupera)"
+  pregunta: "¿La web evita lo que gasta la paciencia (ocultar teléfono, precios o gastos de envío, pedir datos innecesarios, ventanas emergentes al entrar, aspecto descuidado) y hace lo que la recupera (responder las dudas frecuentes, ahorrar pasos, facilitar recuperarse de errores)?"
+  hacer: "Muestra lo que la gente busca (precio, contacto, envío) y ahórrale pasos."
+  evitar: "Esconder información clave o pedir más datos de los necesarios."
+
+- id: MAN-KRUG-PRUEBAS
+  dimension: D7
+  titulo: "Pruebas de usabilidad con usuarios reales (método Krug)"
+  severidad: media
+  tipo: manual
+  norma: "Krug, Haz fácil lo imposible (2010): una mañana al mes, tres usuarios, corregir lo más grave"
+  pregunta: "¿Se ha hecho en el último mes una prueba de usabilidad con al menos 3 personas, observando cómo hacen tareas reales, y se han corregido los problemas más graves encontrados?"
+  hacer: "Prueba con 3 usuarios al mes, invita a todo el equipo a mirar y corrige primero lo más grave."
+  evitar: "Lanzar sin haber visto nunca a una persona real usar la web."

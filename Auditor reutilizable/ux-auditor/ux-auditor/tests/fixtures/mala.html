@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Document</title>
+<style>
+  body { font-family: Arial; font-size: 13px; line-height: 1; margin: 0; }
+  .wrap { width: 1200px; }
+  .menu span { cursor: pointer; padding: 2px; font-family: "Comic Sans MS"; }
+  .gris { color: #bbbbbb; }
+  .mini { font-size: 9px; font-family: Georgia; }
+  .icon { font-size: 12px; display: inline-block; width: 16px; height: 16px; }
+  button:focus, a:focus, input:focus { outline: none; }
+  .spin { animation: spin 2s linear infinite; display:inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .sticky { position: fixed; bottom: 0; left: 0; right: 0; height: 56px; background: #eee; display:flex; }
+  .sticky a { flex: 1; font-size: 10px; }
+  h4 { font-family: Impact; } h2 { font-family: Courier; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="menu">
+    <span onclick="location.href='#a'">Inicio</span>
+    <span onclick="location.href='#b'">Productos</span>
+    <span onclick="location.href='#c'">Ofertas</span>
+    <span onclick="location.href='#d'">Blog</span>
+    <span onclick="location.href='#e'">Contacto</span>
+  </div>
+  <nav><ul><li><a href="#">Uno</a></li><li><a href="#">Dos</a></li><li><a href="#">Tres</a></li><li><a href="#">Cuatro</a></li>
+    <li><a href="#">Cinco</a></li><li><a href="#">Seis</a></li><li><a href="#">Siete</a></li><li><a href="#">Ocho</a></li><li><a href="#">Nueve</a></li></ul></nav>
+  <h4>🚀 Bienvenido</h4>
+  <h2>Oferta</h2>
+  <p class="gris">Este texto gris claro tiene muy poco contraste con el fondo blanco y además usa un interlineado de 1, lo que lo hace difícil de leer en bloques largos como este.</p>
+  <p class="mini">Aviso legal en letra diminuta que nadie puede leer cómodamente en un móvil.</p>
+  <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" style="width:300px;height:150px">
+  <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Banner sin dimensiones">
+  <a href="#">Haz clic aquí</a> · <a href="#no-existe">Ver más</a> · <a href="https://example.org" target="_blank">Leer más</a>
+  <button><span class="icon">✖</span></button>
+  <button class="icon">❤️</button>
+  <span class="spin">⏳</span>
+  <form>
+    <input name="email" placeholder="Tu email" type="text" autocomplete="off">
+    <input type="password" name="clave" placeholder="Contraseña" onpaste="return false">
+    <input type="radio" name="plan" value="a"> A <input type="radio" name="plan" value="b"> B
+  </form>
+  <div onclick="alert(1)" style="cursor:pointer;font-family:Verdana">Comprar ahora</div>
+</div>
+<div class="sticky"><a href="#1">Inicio</a><a href="#2">Buscar</a><a href="#3">Carrito</a><a href="#4">Favoritos</a><a href="#5">Perfil</a><a href="#6">Ajustes</a><a href="#7">Ayuda</a></div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# Configuración del UX-Auditor para este proyecto.
+# Documentación de cada clave: README.md · sección «Configuración».
+proyecto: Mi proyecto
+perfil: web                 # web (móvil + escritorio) | movil | escritorio
+
+# Pesos de cada dimensión del Índice IUX (se reescalan si falta alguna).
+pesos: {D1: 25, D2: 20, D3: 15, D4: 15, D5: 10, D6: 10, D7: 5}
+
+umbral_ci: 7.0              # «uxaudit run» devuelve código 1 si el IUX queda por debajo
+
+reglas_desactivadas: []     # p. ej. [NAV-BARRA-INFERIOR]
+severidades: {}             # p. ej. {INT-CURSOR: media}
+
+tiempo_maximo_s: 45
+espera_tras_carga_ms: 1500
+bloquear_redes_privadas: false   # true en servidores de CI compartidos (anti-SSRF)
+redactar_urls: true              # oculta parámetros (?token=...) en los informes
+capturas: true
+teclado: true                    # prueba real de navegación con la tecla Tab
+rendimiento:
+  activado: true
+  limitar_red_y_cpu: true        # simula un móvil medio con 4G (como Lighthouse)
+
+# viewports personalizados (opcional; sustituyen a los del perfil):
+# viewports:
+#   - {nombre: movil, ancho: 375, alto: 812, movil: true, escala: 2}
+#   - {nombre: escritorio, ancho: 1440, alto: 900, movil: false}
+
+# reglas_extra: reglas_equipo.yaml   # reglas manuales propias del equipo

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tienda Ofertas Flash · Zapatillas de running</title>
+<style>
+  html { font-size: 100%; }
+  body { margin: 0; font: 1rem/1.6 system-ui, sans-serif; color: #1e1b4b; }
+  main { max-width: 70ch; margin: 0 auto; padding: 16px; }
+  .btn { display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border-radius: 10px;
+         background: #c2410c; color: #fff; border: 0; font: inherit; cursor: pointer; text-decoration: none; margin: 4px; }
+  .hero { display: flex; flex-wrap: wrap; gap: 8px; }
+  .caja { height: 5.2em; overflow: hidden; border: 1px solid #ccc; padding: 4px; }
+  .caja p { margin: 0; }
+  .plano { color: inherit; text-decoration: none; }
+  .legal { text-align: justify; text-transform: uppercase; }
+  .cookie { position: fixed; left: 0; right: 0; bottom: 0; background: #111827; color: #fff; padding: 16px; }
+  .cookie .btn { background: #16a34a; color: #fff; }
+  .cookie a { color: #fff; }
+  :focus-visible { outline: 3px solid #f97316; outline-offset: 2px; }
+</style>
+<script src="https://www.googletagmanager.com/gtag/js?id=G-XXXX" async></script>
+<script>document.cookie = "_ga=GA1.1.123456.789; path=/"; document.cookie = "_fbp=fb.1.123.456; path=/";</script>
+</head>
+<body>
+<main>
+  <h1>Zapatillas Veloz 3000</h1>
+  <p>Bienvenido a nuestra tienda online, nos complace ofrecerte los mejores productos del mercado.</p>
+  <p>Para continuar, haga clic en el botón de abajo y siga las instrucciones que aparecerán en pantalla.</p>
+  <div class="hero">
+    <a class="btn" href="#comprar">Comprar ya</a>
+    <a class="btn" href="#oferta">Ver oferta</a>
+    <a class="btn" href="#regalo">Regalar</a>
+    <a class="btn" href="#club">Únete al club</a>
+  </div>
+  <p>¡Date prisa! Solo quedan 2 unidades. 17 personas están viendo este producto ahora mismo.</p>
+  <p>La oferta termina en <span id="reloj">00:09:59</span></p>
+  <div class="caja"><p>Envío gratuito a partir de 50 euros en península, consulta las <a class="plano" href="#condiciones">condiciones</a> para Baleares, Canarias, Ceuta y Melilla.</p></div>
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='150'/%3E" width="300" height="150" alt="IMG_2034.jpg">
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='150'/%3E" width="300" height="150" alt="imagen">
+  <button class="btn" aria-label="Añadir producto 23">Añadir a la cesta</button>
+  <video src="data:video/mp4;base64," autoplay loop width="320" height="180"></video>
+  <p class="legal">Al continuar aceptas que tus datos se utilicen para fines comerciales y publicitarios por parte de nuestros socios durante un periodo indefinido.</p>
+  <form action="#" method="post">
+    <label for="mail">Correo electrónico</label>
+    <input id="mail" type="email" name="email" autocomplete="email" required>
+    <label for="tel">Teléfono (obligatorio)</label>
+    <input id="tel" type="tel" name="telefono" autocomplete="tel" pattern="[0-9]{9}" maxlength="9" required>
+    <label><input type="checkbox" name="news" checked> Quiero recibir la newsletter con ofertas de marketing</label>
+    <label><input type="checkbox" name="terceros" checked> Acepto ceder mis datos a terceros para publicidad</label>
+    <button class="btn" type="submit">Suscribirme</button>
+    <button type="button" class="enlace">No, gracias, prefiero pagar más</button>
+  </form>
+</main>
+<div class="cookie" role="dialog" aria-label="Aviso de cookies">
+  <p>Usamos cookies propias y de terceros para analizar tu navegación y mostrarte publicidad personalizada.</p>
+  <button class="btn" type="button">Aceptar todas</button>
+  <a href="#ajustes">Configurar</a>
+</div>
+<script>
+  let t = 599;
+  setInterval(() => { t--; const m = String(Math.floor(t / 60)).padStart(2, '0'), s = String(t % 60).padStart(2, '0');
+    document.getElementById('reloj').textContent = `00:${m}:${s}`; }, 500);
+</script>
+</body>
+</html>

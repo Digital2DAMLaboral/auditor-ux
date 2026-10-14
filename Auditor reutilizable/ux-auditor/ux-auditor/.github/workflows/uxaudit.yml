@@ -1,0 +1,56 @@
+# Ejemplo de integración continua: audita la web en cada pull request y
+# bloquea el merge si el Índice IUX baja del umbral configurado.
+name: Auditoría UX
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read            # mínimo privilegio
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Instalar
+        run: |
+          pip install -e ".[dev]"
+          python -m playwright install --with-deps chromium
+      - name: Pruebas
+        run: pytest -q
+
+  auditoria:
+    needs: pruebas
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Instalar UX-Auditor
+        run: |
+          pip install -e .
+          python -m playwright install --with-deps chromium
+      # Cambia la ruta por la de tu web (fichero local generado en el build o URL de preview).
+      - name: Auditar
+        run: |
+          uxaudit run tests/fixtures/buena.html \
+            --umbral 7 --bloquear-redes-privadas -f html,json,md -o informes
+      - name: Publicar informe
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: informe-ux
+          path: informes/
+          retention-days: 14

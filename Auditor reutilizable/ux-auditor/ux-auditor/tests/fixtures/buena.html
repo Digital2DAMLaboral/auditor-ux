@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reservas · Restaurante La Marea</title>
+<style>
+  :root { --ink:#1e1b4b; --muted:#475569; --primary:#4338ca; --bg:#ffffff; --line:#c7d2fe; }
+  * { box-sizing: border-box; }
+  html { font-size: 100%; }
+  body { margin:0; font: 1rem/1.6 system-ui, sans-serif; color: var(--ink); background: var(--bg); }
+  .skip { position:absolute; left:-9999px; top:8px; background:#fff; padding:12px 16px; }
+  .skip:focus { left: 8px; }
+  header, main, footer { max-width: 70ch; margin: 0 auto; padding: 16px; }
+  nav ul { list-style:none; display:flex; flex-wrap:wrap; gap:8px; padding:0; margin:0; }
+  nav a, .btn, button { display:inline-flex; align-items:center; justify-content:center; min-height:48px; min-width:48px;
+    padding: 0 16px; border-radius: 10px; cursor: pointer; font: inherit; }
+  nav a { color: var(--primary); }
+  .logo { display:inline-flex; min-height:48px; align-items:center; }
+  .btn, button { background: var(--primary); color:#fff; border: 0; text-decoration:none; }
+  :focus-visible { outline: 3px solid #f97316; outline-offset: 3px; }
+  label { display:block; font-weight:600; margin-top:16px; }
+  input, select { display:block; width:100%; min-height:48px; font:inherit; padding:8px 12px; border:1px solid var(--muted); border-radius:8px; }
+  fieldset { border:1px solid var(--line); border-radius:8px; margin-top:16px; padding: 8px 16px 16px; }
+  fieldset label { display:flex; align-items:center; gap:12px; min-height:48px; font-weight:400; margin:0; }
+  fieldset input { width:24px; min-height:24px; }
+  img { max-width:100%; height:auto; }
+  p { color: var(--ink); }
+  .muted { color: var(--muted); }
+  @keyframes pulse { from { transform: scale(1) } to { transform: scale(1.02) } }
+  .live { animation: pulse 1.5s infinite alternate; }
+  @media (prefers-reduced-motion: reduce) { .live { animation: none; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#principal">Saltar al contenido principal</a>
+<header>
+  <a class="logo" href="./" aria-label="La Marea, ir a la portada"><svg width="40" height="40" aria-hidden="true" focusable="false"><circle cx="20" cy="20" r="18" fill="#4338ca"/></svg></a>
+  <nav aria-label="Principal">
+    <ul>
+      <li><a href="#principal" aria-current="page">Inicio</a></li>
+      <li><a href="#carta">Carta</a></li>
+      <li><a href="#reserva">Reservar</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+</header>
+<main id="principal">
+  <h1>Reserva tu mesa en La Marea</h1>
+  <p>Cocina gallega de temporada frente al puerto. Reserva en menos de un minuto y recibe la confirmación en tu correo electrónico.</p>
+  <p class="live muted">Hoy quedan mesas libres para la cena.</p>
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='320'%3E%3Crect width='640' height='320' fill='%23c7d2fe'/%3E%3C/svg%3E"
+       width="640" height="320" alt="Comedor del restaurante con vistas al puerto">
+
+  <h2 id="carta">Nuestra carta</h2>
+  <p>Platos elaborados con producto de la lonja del día y verduras de huertas cercanas. <a href="#reserva">Ver disponibilidad para reservar</a>.</p>
+
+  <h2 id="reserva">Formulario de reserva</h2>
+  <form action="#" method="post">
+    <p class="muted">Los campos marcados con (obligatorio) son necesarios para reservar.</p>
+    <label for="nombre">Nombre y apellidos (obligatorio)</label>
+    <input id="nombre" name="nombre" autocomplete="name" required>
+    <label for="email">Correo electrónico (obligatorio)</label>
+    <input id="email" name="email" type="email" autocomplete="email" required>
+    <label for="tel">Teléfono</label>
+    <input id="tel" name="telefono" type="tel" autocomplete="tel">
+    <label for="personas">Número de personas</label>
+    <select id="personas" name="personas"><option>2</option><option>3</option><option>4</option></select>
+    <fieldset>
+      <legend>Zona preferida</legend>
+      <label><input type="radio" name="zona" value="interior" checked> Interior</label>
+      <label><input type="radio" name="zona" value="terraza"> Terraza</label>
+    </fieldset>
+    <p><button type="submit">Confirmar reserva</button></p>
+  </form>
+</main>
+<footer id="contacto">
+  <h2>Contacto</h2>
+  <p class="muted">Rúa do Porto 12, A Coruña · <a href="tel:+34981000000">Llamar al 981 000 000</a></p>
+</footer>
+</body>
+</html>

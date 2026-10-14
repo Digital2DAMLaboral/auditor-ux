@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ux-auditor"
+version = "2.1.0"
+description = "Auditor reutilizable de experiencia de usuario: Índice IUX (0–10) con WCAG 2.2, Core Web Vitals, heurísticas de Nielsen y UI UX Pro Max."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Equipo UX · Digitalización Avanzada 2º DAM" }]
+dependencies = [
+  "playwright>=1.49,<2",
+  "PyYAML>=6.0.1,<7",
+  "Jinja2>=3.1.4,<4",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Quality Assurance",
+  "Natural Language :: Spanish",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+uxaudit = "uxaudit.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["uxaudit*"]
+
+[tool.setuptools.package-data]
+uxaudit = [
+  "data/*.yaml", "data/*.csv", "data/*.txt",
+  "vendor/*.js", "vendor/*.txt",
+  "analyzers/js/*.js",
+  "reports/templates/*.j2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["browser: pruebas que necesitan Chromium (playwright install chromium)"]

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><script>alert('xss-titulo')</script>Página hostil "&<>'</title>
+</head>
+<body>
+<main>
+<h1 id="x&quot;&gt;&lt;img src=x onerror=alert(1)&gt;">Prueba de seguridad del auditor</h1>
+<p class="&quot;&gt;&lt;script&gt;alert(2)&lt;/script&gt;">Contenido con intentos de inyección en clases, ids y textos: <img src=x onerror=alert(3)> {{7*7}} {% raw %}{%raw%}{% endraw %} </p>
+<button aria-label="<script>alert('xss-boton')</script>"></button>
+<a href="javascript:alert(4)">‮gnp.exe‬ texto bidi</a>
+<iframe src="http://169.254.169.254/latest/meta-data/" title="metadatos"></iframe>
+<img src="http://169.254.169.254/latest/meta-data/iam" alt="ssrf">
+</main>
+<script>
+  // 1) Intenta falsear las mediciones del auditor sustituyendo APIs del navegador.
+  window.getComputedStyle = () => ({ outlineStyle: 'solid', outlineWidth: '9px', fontSize: '40px', cursor: 'pointer' });
+  Array.prototype.filter = function () { return []; };
+  window.PerformanceObserver = function () { this.observe = () => {}; };
+  Object.defineProperty(document, 'title', { get: () => 'Título falso perfecto para el auditor' });
+  // 2) Diálogos, ventanas emergentes y descargas.
+  alert('alerta'); confirm('¿seguro?'); prompt('dato');
+  window.open('https://example.org/popup');
+  const a = document.createElement('a'); a.href = 'data:text/plain,malware'; a.download = 'virus.txt'; document.body.appendChild(a); a.click();
+  // 3) Peticiones a redes internas / ficheros locales.
+  fetch('http://169.254.169.254/latest/meta-data/').catch(() => {});
+  fetch('file:///etc/passwd').catch(() => {});
+  try { new WebSocket('ws://169.254.169.254:80/'); } catch (e) {}
+  // 4) Atrapa el foco del teclado.
+  document.addEventListener('focusin', (e) => { if (e.target.tagName === 'A') document.querySelector('button').focus(); });
+</script>
+</body>
+</html>
