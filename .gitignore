@@ -1,0 +1,21 @@
+# Dependencias y entornos
+node_modules/
+.venv/
+__pycache__/
+
+# Secretos y configuración local
+.env
+.env.*
+!.env.example
+
+# Salidas y temporales
+dist/
+build/
+coverage/
+.scratch/tmp/
+
+# Sistema y editores
+.DS_Store
+.idea/
+.vscode/
+*.log
